@@ -11,7 +11,7 @@ A Laravel-based transport invoicing and management system with modules for:
 
 ### Clone the Project
 ```bash
-git clone https://your-repo-url.git
+git clone https://github.com/umair-log/Weight-Link.git
 cd your-project-folder 
 ```
 
@@ -38,6 +38,7 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 Serve the App
 ```bash
+php artisan migrate
 php artisan serve
 ```
 

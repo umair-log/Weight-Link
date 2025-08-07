@@ -81,7 +81,8 @@
 										
 										
 									</div>
-									<div class="login-separater text-center mb-5"> <span>OR SIGN UP WITH EMAIL</span>
+									
+									{{-- <div class="login-separater text-center mb-5"> <span>OR SIGN UP WITH EMAIL</span>
 										<hr/>
 									</div>
 									<div class="list-inline contacts-social text-center">
@@ -89,7 +90,7 @@
 										<a href="javascript:;" class="list-inline-item bg-twitter text-white border-0 rounded-3"><i class="bx bxl-twitter"></i></a>
 										<a href="javascript:;" class="list-inline-item bg-google text-white border-0 rounded-3"><i class="bx bxl-google"></i></a>
 										<a href="javascript:;" class="list-inline-item bg-linkedin text-white border-0 rounded-3"><i class="bx bxl-linkedin"></i></a>
-									</div>
+									</div> --}}
 
 								</div>
 							</div>

@@ -11,6 +11,7 @@ class Invoice extends Model
         'vehicle_name',
         'customer_name',
         'item_id',
+        'user_id',
         'item_type',
         'amount',
         're_enter_first_weight',
@@ -23,4 +24,9 @@ class Invoice extends Model
     {
         return $this->belongsTo(Item::class);
     }
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }

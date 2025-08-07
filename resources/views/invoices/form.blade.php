@@ -4,13 +4,30 @@
 </div>
 
 <div class="mb-3">
-    <label>Vehicle Name</label>
-    <input type="text" name="vehicle_name" class="form-control" value="{{ old('vehicle_name', $invoice->vehicle_name ?? '') }}" required>
+    <label>Vehicle</label>
+    <select name="vehicle_name" class="form-control" required>
+        <option value="">Vehicle Select</option>
+        @foreach($trucks as $vehicle_name)
+            <option value="{{ $vehicle_name }}" {{ old('vehicle_name', $item->vehicle_name ?? '') == $vehicle_name ? 'selected' : '' }}>{{ $vehicle_name }}</option>
+        @endforeach
+    </select>
 </div>
 
-<div class="mb-3">
+{{-- <div class="mb-3">
     <label>Customer Name</label>
     <input type="text" name="customer_name" class="form-control" value="{{ old('customer_name', $invoice->customer_name ?? '') }}" required>
+</div> --}}
+
+<div class="mb-3">
+    <label>Customer</label>
+    <select name="user_id" class="form-control" required>
+        <option value="">Select Customer</option>
+        @foreach($users as $user)
+            <option value="{{ $user->id }}" {{ old('user_id', $invoice->user_id ?? '') == $user->id ? 'selected' : '' }}>
+                {{ $user->name }} ({{ $user->email }})
+            </option>
+        @endforeach
+    </select>
 </div>
 
 <div class="mb-3">

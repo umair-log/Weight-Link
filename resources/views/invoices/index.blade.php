@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+
 <div class="container">
     <h4 class="mb-3">Invoices</h4>
 
@@ -29,7 +31,7 @@
             <tr>
                 <td>{{ $invoice->type }}</td>
                 <td>{{ $invoice->vehicle_name }}</td>
-                <td>{{ $invoice->customer_name }}</td>
+                <td>{{ $invoice->user->name }}</td>
                 <td>{{ $invoice->item->name ?? '-' }}</td>
                 <td>{{ $invoice->item_type }}</td>
                 <td>{{ $invoice->amount }}</td>

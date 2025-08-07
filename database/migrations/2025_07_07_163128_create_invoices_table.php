@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('type');
             $table->string('vehicle_name');
-            $table->string('customer_name');
+            // $table->string('customer_name');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('item_id')->constrained()->onDelete('cascade');
             $table->string('item_type');
             $table->decimal('amount', 10, 2);

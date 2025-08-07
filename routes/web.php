@@ -11,6 +11,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProfileController;
+
+
 
 
 Route::get('/', function () {
@@ -18,6 +21,11 @@ Route::get('/', function () {
         return redirect('/dashboard'); // User is logged in
     }
     return redirect('/login'); // User is not logged in
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
 Route::get('/signup', [RegisterController::class, 'showForm'])->name('register.form');

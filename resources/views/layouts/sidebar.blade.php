@@ -22,6 +22,15 @@
             <div class="menu-title">User Module</div>
         </a>
     </li>
+
+    <li>
+        <a href="{{ route('items.index') }}">
+            <div class="parent-icon"><i class="bx bx-box"></i></div>
+            <div class="menu-title">Item Module</div>
+        </a>
+    </li>
+
+
     @endif
 
     {{-- Customer Module --}}
@@ -34,19 +43,14 @@
     </li> --}}
 
 
-	<li>
+	{{-- <li>
 		<a href="{{ route('orders.index') }}">
 			<div class="parent-icon"><i class="bx bx-package"></i></div>
 			<div class="menu-title">Order Module</div>
 		</a>
-	</li>
+	</li> --}}
 
-    <li>
-        <a href="{{ route('items.index') }}">
-            <div class="parent-icon"><i class="bx bx-box"></i></div>
-            <div class="menu-title">Item Module</div>
-        </a>
-    </li>
+
 
     <li>
         <a href="{{ route('invoices.index') }}">

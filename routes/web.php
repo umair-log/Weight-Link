@@ -54,6 +54,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('items', ItemController::class);
     Route::resource('invoices', InvoiceController::class);
     Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
+    
+    // Reports routes (Admin only)
+    Route::get('reports', [App\Http\Controllers\ReportsController::class, 'index'])->name('reports.index');
+    Route::get('reports/print', [App\Http\Controllers\ReportsController::class, 'print'])->name('reports.print');
 
 });
 

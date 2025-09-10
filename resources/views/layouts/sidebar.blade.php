@@ -59,6 +59,16 @@
         </a>
     </li>
 
+    {{-- Reports - Admin Only --}}
+    @if(auth()->check() && auth()->user()->type === 'admin')
+    <li>
+        <a href="{{ route('reports.index') }}">
+            <div class="parent-icon"><i class="bx bx-bar-chart-alt-2"></i></div>
+            <div class="menu-title">Reports</div>
+        </a>
+    </li>
+    @endif
+
     {{-- Client-specific navigation --}}
     @if(auth()->check() && auth()->user()->type === 'client')
     <li>

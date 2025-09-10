@@ -8,18 +8,59 @@ use App\Models\User;
 
 class InvoiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        if (auth()->user()->type === 'admin') {
-            $invoices = Invoice::with(['item', 'user'])->latest()->get();
-        } else {
-            $invoices = Invoice::with(['item', 'user'])
-                            ->where('user_id', auth()->id())
-                            ->latest()
-                            ->get();
+        $query = Invoice::with(['item', 'user']);
+        
+        // Role-based filtering
+        if (auth()->user()->type !== 'admin') {
+            $query->where('user_id', auth()->id());
         }
         
-        return view('invoices.index', compact('invoices'));
+        // Search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('type', 'like', "%{$search}%")
+                  ->orWhere('vehicle_name', 'like', "%{$search}%")
+                  ->orWhere('driver', 'like', "%{$search}%")
+                  ->orWhere('item_type', 'like', "%{$search}%")
+                  ->orWhereHas('user', function($userQuery) use ($search) {
+                      $userQuery->where('name', 'like', "%{$search}%")
+                               ->orWhere('email', 'like', "%{$search}%");
+                  })
+                  ->orWhereHas('item', function($itemQuery) use ($search) {
+                      $itemQuery->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        // Filter by type
+        if ($request->filled('type_filter')) {
+            $query->where('type', $request->type_filter);
+        }
+        
+        // Filter by vehicle
+        if ($request->filled('vehicle_filter')) {
+            $query->where('vehicle_name', $request->vehicle_filter);
+        }
+        
+        // Date range filter
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+        
+        $invoices = $query->latest()->paginate(15);
+        
+        // Get filter options for dropdowns
+        $vehicleOptions = Invoice::distinct()->pluck('vehicle_name')->filter();
+        $typeOptions = Invoice::distinct()->pluck('type')->filter();
+        
+        return view('invoices.index', compact('invoices', 'vehicleOptions', 'typeOptions'));
     }
 
     public function create()
@@ -62,11 +103,31 @@ class InvoiceController extends Controller
         return redirect()->route('invoices.index')->with('success', 'Invoice created successfully.');
     }
 
-    public function edit(Invoice $invoice)
+    public function show(Invoice $invoice)
     {
-        // Authorization check - only admin or invoice owner can edit
+        // Authorization check - only admin or invoice owner can view
         if (auth()->user()->type !== 'admin' && $invoice->user_id !== auth()->id()) {
             abort(403, 'Unauthorized action.');
+        }
+        
+        return view('invoices.show', compact('invoice'));
+    }
+
+    public function print(Invoice $invoice)
+    {
+        // Authorization check - only admin or invoice owner can print
+        if (auth()->user()->type !== 'admin' && $invoice->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+        
+        return view('invoices.print', compact('invoice'));
+    }
+
+    public function edit(Invoice $invoice)
+    {
+        // Authorization check - only admin can edit, clients cannot edit
+        if (auth()->user()->type !== 'admin') {
+            abort(403, 'Unauthorized action. Only administrators can edit invoices.');
         }
 
         $trucks = [
@@ -89,9 +150,9 @@ class InvoiceController extends Controller
 
     public function update(Request $request, Invoice $invoice)
     {
-        // Authorization check - only admin or invoice owner can update
-        if (auth()->user()->type !== 'admin' && $invoice->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized action.');
+        // Authorization check - only admin can update
+        if (auth()->user()->type !== 'admin') {
+            abort(403, 'Unauthorized action. Only administrators can update invoices.');
         }
 
         $request->validate([
@@ -114,9 +175,9 @@ class InvoiceController extends Controller
 
     public function destroy(Invoice $invoice)
     {
-        // Authorization check - only admin or invoice owner can delete
-        if (auth()->user()->type !== 'admin' && $invoice->user_id !== auth()->id()) {
-            abort(403, 'Unauthorized action.');
+        // Authorization check - only admin can delete
+        if (auth()->user()->type !== 'admin') {
+            abort(403, 'Unauthorized action. Only administrators can delete invoices.');
         }
 
         $invoice->delete();

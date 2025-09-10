@@ -59,7 +59,31 @@
         </a>
     </li>
 
+    {{-- Client-specific navigation --}}
+    @if(auth()->check() && auth()->user()->type === 'client')
+    <li>
+        <a href="{{ route('profile.edit') }}">
+            <div class="parent-icon"><i class="bx bx-user-circle"></i></div>
+            <div class="menu-title">Edit Profile</div>
+        </a>
+    </li>
+    @endif
+
 </ul>
+
+{{-- Client Logout Section --}}
+@if(auth()->check() && auth()->user()->type === 'client')
+<div class="sidebar-footer mt-auto p-3">
+    <div class="d-grid">
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                <i class="bx bx-log-out me-2"></i>Logout
+            </button>
+        </form>
+    </div>
+</div>
+@endif
 
     <!-- End Navigation -->
 

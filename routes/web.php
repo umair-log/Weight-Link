@@ -53,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('items', ItemController::class);
     Route::resource('invoices', InvoiceController::class);
+    Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
 
 });
 

@@ -79,8 +79,8 @@
                     </div>
 
                     <!-- Invoices Table -->
-                    <div class="table-responsive">
-                        <table class="table table-hover">
+                    <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                        <table class="table table-hover" style="min-width: 1200px;">
                             <thead class="table-dark">
                                 <tr>
                                     <th>ID</th>
@@ -98,47 +98,49 @@
                             <tbody>
                                 @forelse($invoices as $invoice)
                                 <tr>
-                                    <td>
+                                    <td style="min-width: 80px;">
                                         <span class="badge bg-primary">#{{ $invoice->id }}</span>
                                     </td>
-                                    <td>
+                                    <td style="min-width: 120px;">
                                         <span class="badge bg-{{ $invoice->type == 'First Weight' ? 'success' : 'info' }}">
                                             {{ $invoice->type }}
                                         </span>
                                     </td>
-                                    <td>
-                                        <small class="text-muted">{{ $invoice->vehicle_name }}</small>
+                                    <td style="min-width: 150px;">
+                                        <div class="text-truncate" title="{{ $invoice->vehicle_name }}">
+                                            {{ $invoice->vehicle_name }}
+                                        </div>
                                     </td>
-                                    <td>
+                                    <td style="min-width: 180px;">
                                         <div>
                                             <strong>{{ $invoice->user->name }}</strong>
                                             <br><small class="text-muted">{{ $invoice->user->email }}</small>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style="min-width: 160px;">
                                         <div>
                                             <strong>{{ $invoice->item->name ?? 'N/A' }}</strong>
                                             <br><small class="text-muted">{{ $invoice->item_type }}</small>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style="min-width: 100px;">
                                         <strong class="text-success">${{ number_format($invoice->amount, 2) }}</strong>
                                     </td>
-                                    <td>
-                                        <small>
-                                            <div>First: {{ number_format($invoice->re_enter_first_weight, 2) }}</div>
-                                            <div>Dummy 1: {{ number_format($invoice->dummy_weight_one, 2) }}</div>
-                                            <div>Dummy 2: {{ number_format($invoice->dummy_weight_two, 2) }}</div>
-                                        </small>
+                                    <td style="min-width: 140px;">
+                                        <div class="small">
+                                            <div><strong>First:</strong> {{ number_format($invoice->re_enter_first_weight, 2) }} kg</div>
+                                            <div><strong>Dummy 1:</strong> {{ number_format($invoice->dummy_weight_one, 2) }} kg</div>
+                                            <div><strong>Dummy 2:</strong> {{ number_format($invoice->dummy_weight_two, 2) }} kg</div>
+                                        </div>
                                     </td>
-                                    <td>{{ $invoice->driver }}</td>
-                                    <td>
-                                        <small>
+                                    <td style="min-width: 120px;">{{ $invoice->driver }}</td>
+                                    <td style="min-width: 120px;">
+                                        <div class="small">
                                             {{ $invoice->created_at->format('M d, Y') }}<br>
                                             {{ $invoice->created_at->format('h:i A') }}
-                                        </small>
+                                        </div>
                                     </td>
-                                    <td>
+                                    <td style="min-width: 150px;">
                                         <div class="btn-group" role="group">
                                             <a href="{{ route('invoices.print', $invoice) }}" 
                                                class="btn btn-sm btn-outline-primary" title="Print">
@@ -274,6 +276,10 @@
     background-color: #343a40;
     color: white;
     padding: 1rem 0.75rem;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .table td {
@@ -281,6 +287,7 @@
     font-size: 0.875rem;
     padding: 0.75rem;
     border-color: #dee2e6;
+    white-space: nowrap;
 }
 
 .table-hover tbody tr:hover {
@@ -290,6 +297,34 @@
 .table-responsive {
     border-radius: 0.375rem;
     overflow: hidden;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Horizontal Scroll Styling */
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Text truncation for long content */
+.text-truncate {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Badge Styling */
